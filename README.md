@@ -11,11 +11,11 @@ Foreman.source = "/javascripts/worker.js" # your worker source
 # Callback-flavor
 Foreman.execute("factorial", 5, function(result) {...})
 
-# Promise-flavor
+# Promise-flavor (preferred)
 Foreman.execute("factorial", 5)
   .then(function(result) {...})
-  .catch(function(error) {...})
-  .finally(function() {...})
+  .catch(function(error) {...}) # caught() for older browsers 
+  .finally(function() {...})    # lastly() for older browsers
 ```
 
 # Defining Jobs
