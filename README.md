@@ -6,8 +6,6 @@ Foreman.js
 Jobs are executed asynchronously and you're welcome to use callbacks or promises to handle the result.
 
 ```
-Foreman.source = "/path/to/jobs.js" # your worker source
-
 # Callback-flavor
 Foreman.execute("factorial", 5, function(result) {...})
 
@@ -19,11 +17,6 @@ Foreman.execute("factorial", 5)
 ```
 
 # Defining Jobs
-
-Foreman uses a single script to define the available jobs. If you want to
-define your jobs in separate files you'll need to concatenate them
-into a single script 
-(see [gulp](http://gulpjs.com/) or [grunt](http://gruntjs.com/)).
 
 Job definition follows a simple template:
 
@@ -37,13 +30,14 @@ this.cancel("array must only contain numbers")
 this.trigger("event")
 ```
 
+Job names can be any string (we recommend `dashed-naming` for readability),
+and each job function accepts a single argument as it's input 
+called the "payload".
+
+
 Here's a simple job definition that sums the values within an array:
 
 ```
-# /path/to/jobs.js
-#
-# A simple sum example:
-#
 Foreman.define("sum", function(array, job) {
   var sum = 0;
   
@@ -56,11 +50,9 @@ Foreman.define("sum", function(array, job) {
 })
 ```
 
-With the job defined, here's how you would execute it through `Foreman`:
+Executing it in the background is simple:
 
 ```
-Foreman.source = ["/path/to/foreman.worker.js", "/path/to/jobs.js"]
-
 Foreman.execute("sum", [1, 2, 3])
   .then(function(sum) {
     console.log("sum is " + sum);
@@ -71,13 +63,18 @@ Foreman.execute("sum", [1, 2, 3])
 
 ## Initialization
 
-The source of jobs is defined through `Foreman.source`.
+The pool of available jobs is defined through `Foreman.source`.
+In production we recommend working from a single concatenated source file 
+(see [gulp](http://gulpjs.com/) or [grunt](http://gruntjs.com/)).
 
 ```
+# jobs.js must include foreman.worker.js dependency in this case
 Foreman.source = "/path/to/jobs.js"
+```
 
-# Path to foreman.worker.js must be given first if the job script
-# doesn't already include it
+If you want to work from multiple sources, simply pass an array instead.
+
+```
 Foreman.source = ["/path/to/foreman.worker.js", "/path/to/jobs.js"]
 ```
 
