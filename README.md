@@ -6,7 +6,7 @@ Foreman.js
 Jobs are executed asynchronously and you're welcome to use callbacks or promises to handle the result.
 
 ```
-Foreman.source = "/javascripts/worker.js" # your worker source
+Foreman.source = "/path/to/jobs.js" # your worker source
 
 # Callback-flavor
 Foreman.execute("factorial", 5, function(result) {...})
@@ -40,7 +40,7 @@ this.trigger("event")
 Here's a simple job definition that sums the values within an array:
 
 ```
-# /javascripts/worker.js
+# /path/to/jobs.js
 #
 # A simple sum example:
 #
@@ -59,7 +59,7 @@ Foreman.define("sum", function(array, job) {
 With the job defined, here's how you would execute it through `Foreman`:
 
 ```
-Foreman.source = "/javascripts/worker.js"
+Foreman.source = ["/path/to/foreman.worker.js", "/path/to/jobs.js"]
 
 Foreman.execute("sum", [1, 2, 3])
   .then(function(sum) {
