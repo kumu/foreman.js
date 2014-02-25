@@ -23,24 +23,40 @@ Foreman.execute("factorial", 5)
 Foreman uses a single script to define the available jobs. If you want to
 define your jobs in separate files you'll need to concatenate them
 into a single script 
-(see [gulp](http://gulpjs.com/) or [grunt](http://gruntjs.com/).
+(see [gulp](http://gulpjs.com/) or [grunt](http://gruntjs.com/)).
+
+Job definition follows a simple template:
+
+```
+Foreman.define("job-name", function(payload, job) { ... })
+
+# TODO: Consider binding the job func to the job itself to
+# avoid the additional parameter
+this.progress(0.5)
+this.cancel("array must only contain numbers")
+this.trigger("event")
+```
+
+Here's a simple job definition that sums the values within an array:
 
 ```
 # /javascripts/worker.js
 #
 # A simple sum example:
 #
-Foreman.define("sum", function(array) {
+Foreman.define("sum", function(job, array) {
   var sum = 0;
   
-  for (var i = 0; i < array.length; i++)
+  for (var i = 0; i < array.length; i++) {
     sum += array[i];
+    job.progress(i / array.length);
+  }
   
   return sum;
 })
 ```
 
-With `sum` defined, you could now execute it through `Foreman`:
+With the job defined, here's how you would execute it through `Foreman`:
 
 ```
 Foreman.source = "/javascripts/worker.js"
@@ -55,9 +71,10 @@ Foreman.execute("sum", [1, 2, 3])
 
 ## Initialization
 
-All web workers are driven by a single script.
+All jobs are driven by a single script.
 
 ```
+# worker.js must also include foreman.worker.js
 Foreman.source = "/path/to/worker.js"
 ```
 
