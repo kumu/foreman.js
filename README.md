@@ -71,11 +71,14 @@ Foreman.execute("sum", [1, 2, 3])
 
 ## Initialization
 
-All jobs are driven by a single script.
+The source of jobs is defined through `Foreman.source`.
 
 ```
-# worker.js must also include foreman.worker.js
-Foreman.source = "/path/to/worker.js"
+Foreman.source = "/path/to/jobs.js"
+
+# Path to foreman.worker.js must be given first if the job script
+# doesn't already include it
+Foreman.source = ["/path/to/foreman.worker.js", "/path/to/jobs.js"]
 ```
 
 Additional defaults can be configured through `Foreman.defaults`:
