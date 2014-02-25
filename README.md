@@ -44,7 +44,7 @@ Here's a simple job definition that sums the values within an array:
 #
 # A simple sum example:
 #
-Foreman.define("sum", function(job, array) {
+Foreman.define("sum", function(array, job) {
   var sum = 0;
   
   for (var i = 0; i < array.length; i++) {
